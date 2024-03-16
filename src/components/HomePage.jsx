@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { account, databases } from '../appwrite/appwrite-config';
+import { account, databases, Query } from '../appwrite/appwrite-config';
 import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx';
 import Header from './Header';
