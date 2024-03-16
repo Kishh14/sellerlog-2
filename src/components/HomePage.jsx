@@ -290,7 +290,10 @@ const HomePage = () => {
   const getData = () => {
     const promise = databases.listDocuments(
       '65f058795179029c97a7',
-      '65f058bdc26797558fcf'
+      '65f058bdc26797558fcf',
+      [
+        Query.limit(500000),
+      ]
     );
 
     promise.then(
