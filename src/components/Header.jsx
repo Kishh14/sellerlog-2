@@ -41,7 +41,6 @@ const Header = ({
     getData.then(
       function (response) {
         setUserDetails(response);
-        setName(response.name);
       },
       function (error) {
         console.error(error);

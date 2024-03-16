@@ -148,6 +148,7 @@ const HomePage = () => {
         .then(
           function (response) {
             getData();
+            console.log(response)
           },
           function (error) {
             console.error(error);
@@ -296,6 +297,7 @@ const HomePage = () => {
       function (response) {
         setSellerData(response.documents);
         setFilteredSellerData(response.documents);
+        console.log(response)
       },
       function (error) {
         console.error(error);
