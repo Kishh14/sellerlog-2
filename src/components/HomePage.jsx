@@ -552,9 +552,12 @@ const HomePage = () => {
                   '65f058bdc26797558fcf', // Collection ID
                   seller.$id,
                   {
-                    fap: String(parsedSeller.FAP),
-                    live: String(parsedSeller.Live),
-                    di: String(parsedSeller.DI),
+                    fap: String(parsedSeller.FAP) || String(seller.fap),
+                    live: String(parsedSeller.Live) || String(seller.live),
+                    di: String(parsedSeller.DI) || String(seller.di),
+                    onboarding: String(parsedSeller.Onboarding) || String(seller.onboarding),
+                    allocation: String(parsedSeller.Allocation) || String(seller.allocation),
+                    publish: String(parsedSeller.Publish) || String(seller.publish),
                     category:
                       seller.category === 'Paid Seller'
                         ? seller.category
@@ -1608,10 +1611,12 @@ const HomePage = () => {
         >
           <Modal.Header closeButton className="bg-dark bg-opacity-75">
             <Modal.Title className="fs-5 text-light">
-              Upload Xcel file to update FAP/Live/DI
+              Update Data
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-secondary bg-opacity-50">
+            <p className='fw-bold m-0 mt-2' style={{fontSize: '18px'}}>The Xcel file should have same header as below:</p>
+            <p className='m-0 p-0 fw-semibold mb-4' style={{fontSize: '14px'}}><span className='text-danger'>Entity ID</span> | FAP | Live | DI | Allocation | Onboarding | Publish</p>
             <div className="my-3">
               <form onSubmit={handleUpdatingData}>
                 <input
