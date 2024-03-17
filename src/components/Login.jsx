@@ -18,7 +18,7 @@ const Login = ({
   const loginUser = async (e) => {
     e.preventDefault();
 
-    const promise = account.createEmailPasswordSession(
+    const promise = account.createEmailSession(
       user.email,
       user.password
     );
