@@ -293,7 +293,7 @@ const HomePage = () => {
       '65f058795179029c97a7',
       '65f058bdc26797558fcf',
       [
-        Query.limit(500000),
+        Query.limit(100000),
       ]
     );
 
@@ -301,7 +301,6 @@ const HomePage = () => {
       function (response) {
         setSellerData(response.documents);
         setFilteredSellerData(response.documents);
-        console.log(response)
       },
       function (error) {
         console.error(error);
@@ -558,12 +557,12 @@ const HomePage = () => {
                   '65f058bdc26797558fcf', // Collection ID
                   seller.$id,
                   {
-                    fap: String(parsedSeller.FAP) || String(seller.fap),
-                    live: String(parsedSeller.Live) || String(seller.live),
-                    di: String(parsedSeller.DI) || String(seller.di),
-                    onboarding: String(parsedSeller.Onboarding) || String(seller.onboarding),
-                    allocation: String(parsedSeller.Allocation) || String(seller.allocation),
-                    publish: String(parsedSeller.Publish) || String(seller.publish),
+                    fap: String(parsedSeller.FAP) || String(seller.fap) || '',
+                    live: String(parsedSeller.Live) || String(seller.live) || '',
+                    di: String(parsedSeller.DI) || String(seller.di) || '',
+                    onboarding: String(parsedSeller.Onboarding) || String(seller.onboarding) || '',
+                    allocation: String(parsedSeller.Allocation) || String(seller.allocation) || '',
+                    publish: String(parsedSeller.Publish) || String(seller.publish) || '',
                     category:
                       seller.category === 'Paid Seller'
                         ? seller.category
@@ -1442,7 +1441,7 @@ const HomePage = () => {
                                       ></lord-icon>
                                     </button>
                                   </Dropdown.Item>
-                                  {adminEmail === 'Lokesh5551@gmail.com' ? (
+                                  {adminEmail === 'lokesh5551@gmail.com' ? (
                                     <Dropdown.Item>
                                       <button
                                         className="border-0 bg-transparent"
