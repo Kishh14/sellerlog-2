@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { account, databases } from '../appwrite/appwrite-config';
+import { Query } from 'appwrite';
 import '../index.css'
 // Icons
 import { IoSearchOutline } from 'react-icons/io5';
@@ -52,7 +53,10 @@ const Header = ({
   useEffect(() => {
     const promise = databases.listDocuments(
       '65f058795179029c97a7',
-      '65f058bdc26797558fcf'
+      '65f058bdc26797558fcf',
+      [
+        Query.limit(100000)
+      ]
     );
 
     promise.then(
