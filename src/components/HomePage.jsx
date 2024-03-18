@@ -115,16 +115,18 @@ const HomePage = () => {
     //   }
     // };
     const calculateCategory = () => {
-      if (live === 0) { 
+      if (live === 0) {
         return 'Non-Live';
-      } else if (live <= 3) {
-        return 'Low SKUs';
-      } else if (di === 1) {
-        return "Low DI's";
-      } else {
-        return 'Uncategorised';
       }
+      if (live > 0 && live <= 3) {
+        return 'Low SKUs';
+      }
+      if (di === 1) {
+        return "Low DI's";
+      }
+      return 'Uncategorised';
     };
+    
     const categoryFnc = calculateCategory();
     const existingEntityID = sellerData.find(
       (seller) => seller.entityID === entityID
@@ -438,15 +440,16 @@ const HomePage = () => {
         const arr = [];
 
         const calculateCategory = (item) => {
-          if (item.live === 0) { 
+          if (item.live === 0) {
             return 'Non-Live';
-          } else if (item.live <= 3) {
-            return 'Low SKUs';
-          } else if (item.di === 1) {
-            return "Low DI's";
-          } else {
-            return 'Uncategorised';
           }
+          if (item.live > 0 && item.live <= 3) {
+            return 'Low SKUs';
+          }
+          if (item.di === 1) {
+            return "Low DI's";
+          }
+          return 'Uncategorised';
         };
 
         parsedData.map((item) => {
