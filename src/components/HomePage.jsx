@@ -34,6 +34,7 @@ const HomePage = () => {
   const [fap, setFap] = useState(0);
   const [live, setLive] = useState(0);
   const [di, setDi] = useState(0);
+  const [category, setCategory] = useState('');
 
   const [sellerData, setSellerData] = useState();
   const [filteredSellerData, setFilteredSellerData] = useState([]);
@@ -103,17 +104,6 @@ const HomePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // const calculateCategory = () => {
-    //   if (live <= 3 && live > 0) {
-    //     return 'Low SKUs';
-    //   } else if (live === 0) {
-    //     return 'Non-Live';
-    //   } else if (di === 1) {
-    //     return "Low DI's";
-    //   } else {
-    //     return 'Uncategorised';
-    //   }
-    // };
     const calculateCategory = () => {
       if (live === 0) {
         return 'Non-Live';
@@ -241,6 +231,20 @@ const HomePage = () => {
   };
 
   const handleEdit = () => {
+    const calculateCategory = () => {
+      if (live === 0) {
+        return 'Non-Live';
+      }
+      if (live > 0 && live <= 3) {
+        return 'Low SKUs';
+      }
+      if (di === 1) {
+        return "Low DI's";
+      }
+      return 'Uncategorised';
+    };
+    const categoryFnc = calculateCategory();
+
     if (!status) {
       setStatusError(true);
       return;
@@ -261,6 +265,7 @@ const HomePage = () => {
           di,
           status,
           cataloguer,
+          category: category === 'Paid Seller' ? category : categoryFnc,
         }
       );
       toast
@@ -297,6 +302,7 @@ const HomePage = () => {
           setDi(data.di || '');
           setStatus(data.status);
           setCataloguer(data.cataloguer || 'Select Cataloguer');
+          setCategory(data.category || 'Uncategorized');
         }
       });
   }, [editMode]);
@@ -558,18 +564,16 @@ const HomePage = () => {
                 String(seller.entityID) === String(parsedSeller['Entity ID'])
               ) {
                 const calculateCategory = () => {
-                  if (
-                    Number(parsedSeller.Live) <= Number(3) &&
-                    Number(parsedSeller.Live) > Number(0)
-                  ) {
-                    return 'Low SKUs';
-                  } else if (Number(parsedSeller.Live) === Number(0)) {
+                  if (parsedSeller.live === 0) {
                     return 'Non-Live';
-                  } else if (Number(parsedSeller.DI) === Number(1)) {
-                    return "Low DI's";
-                  } else {
-                    return 'Uncategorised';
                   }
+                  if (parsedSeller.live > 0 && parsedSeller.live <= 3) {
+                    return 'Low SKUs';
+                  }
+                  if (parsedSeller.di === 1) {
+                    return "Low DI's";
+                  }
+                  return 'Uncategorised';
                 };
                 const categoryFnc = calculateCategory();
 
@@ -578,12 +582,12 @@ const HomePage = () => {
                   '65f058bdc26797558fcf', // Collection ID
                   seller.$id,
                   {
-                    fap: String(parsedSeller.FAP) || String(seller.fap) || '',
-                    live: String(parsedSeller.Live) || String(seller.live) || '',
-                    di: String(parsedSeller.DI) || String(seller.di) || '',
-                    onboarding: String(parsedSeller.Onboarding) || String(seller.onboarding) || '',
-                    allocation: String(parsedSeller.Allocation) || String(seller.allocation) || '',
-                    publish: String(parsedSeller.Publish) || String(seller.publish) || '',
+                    fap: parsedSeller.FAP || seller.fap || 0,
+                    live: parsedSeller.Live || seller.live || 0,
+                    di: parsedSeller.DI || seller.di || 0,
+                    onboarding: parsedSeller.Onboarding || seller.onboarding || '',
+                    allocation: parsedSeller.Allocation || seller.allocation || '',
+                    publish: parsedSeller.Publish || seller.publish || '',
                     category:
                       seller.category === 'Paid Seller'
                         ? seller.category
