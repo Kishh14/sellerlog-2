@@ -31,9 +31,9 @@ const HomePage = () => {
   const [onboarding, setOnboarding] = useState('');
   const [allocation, setAllocation] = useState('');
   const [publish, setPublish] = useState('');
-  const [fap, setFap] = useState('');
-  const [live, setLive] = useState('');
-  const [di, setDi] = useState('');
+  const [fap, setFap] = useState(0);
+  const [live, setLive] = useState(0);
+  const [di, setDi] = useState(0);
 
   const [sellerData, setSellerData] = useState();
   const [filteredSellerData, setFilteredSellerData] = useState([]);
@@ -104,11 +104,11 @@ const HomePage = () => {
     e.preventDefault();
 
     const calculateCategory = () => {
-      if (Number(live) <= Number(3) && Number(live) > Number(0)) {
+      if (live <= 3 && live > 0) {
         return 'Low SKUs';
-      } else if (Number(live) === Number(0)) {
+      } else if (live === 0) {
         return 'Non-Live';
-      } else if (Number(di) === Number(1)) {
+      } else if (di === 1) {
         return "Low DI's";
       } else {
         return 'Uncategorised';
@@ -427,6 +427,18 @@ const HomePage = () => {
         const arr = [];
 
         parsedData.map((item) => {
+          const calculateCategory = () => {
+            if (item.live <= 3 && item.live > 0) {
+              return 'Low SKUs';
+            } else if (item.live === 0) {
+              return 'Non-Live';
+            } else if (item.di === 1) {
+              return "Low DI's";
+            } else {
+              return 'Uncategorised';
+            }
+          };
+          const categoryFnc = calculateCategory();
           const obj = {
             entityName: item['Entity Name'] || 'N/A',
             entityID: item['Entity ID'] || 'N/A',
@@ -438,14 +450,7 @@ const HomePage = () => {
             live: String(item.Live) || 'N/A',
             di: String(item.DI) || 'N/A',
             status: item.Status || '',
-            category:
-              Number(item.live) <= 3
-                ? 'Low SKUs'
-                : Number(item.live) === 0
-                ? 'Non-Live'
-                : Number(item.di) === 1
-                ? "Low DI's"
-                : 'Uncategorised',
+            category: categoryFnc,
             comments: [],
           };
           arr.push(obj);
@@ -488,9 +493,11 @@ const HomePage = () => {
                   .then(
                     function (response) {
                       getData();
+                      console.log(response)
                     },
                     function (error) {
-                      console.log('Error adding data: ', error);
+                      console.log('Error adding data: ')
+                      console.log(error);
                       const errorNotify = () => toast.error(`${error}`);
                       errorNotify();
                     }
@@ -498,10 +505,9 @@ const HomePage = () => {
               }
             }
           } catch (err) {
-            const errorNotify = () =>
-              toast.error('Error Adding New Sellers ' + `${err}`);
+            const errorNotify = () => toast.error('Error Adding New Sellers ' + `${err}`);
             errorNotify();
-            console.error('Error Adding New Sellers' + err);
+            console.log('Error Adding New Sellers' + err);
           }
         });
 
