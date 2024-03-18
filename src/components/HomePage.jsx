@@ -1441,7 +1441,7 @@ const HomePage = () => {
                                       ></lord-icon>
                                     </button>
                                   </Dropdown.Item>
-                                  {adminEmail === 'lokesh5551@gmail.com' ? (
+                                  {adminEmail === 'lokesh5551@gmail.com' || 'salvikishan833@gmail.com' ? (
                                     <Dropdown.Item>
                                       <button
                                         className="border-0 bg-transparent"
