@@ -426,19 +426,20 @@ const HomePage = () => {
         const parsedData = XLSX.utils.sheet_to_json(sheet);
         const arr = [];
 
+        const calculateCategory = (item) => {
+          if (item.live === 0) { 
+            return 'Non-Live';
+          } else if (item.live <= 3) {
+            return 'Low SKUs';
+          } else if (item.di === 1) {
+            return "Low DI's";
+          } else {
+            return 'Uncategorised';
+          }
+        };
+
         parsedData.map((item) => {
-          const calculateCategory = () => {
-            if (item.live <= 3 && item.live > 0) {
-              return 'Low SKUs';
-            } else if (item.live === 0) {
-              return 'Non-Live';
-            } else if (item.di === 1) {
-              return "Low DI's";
-            } else {
-              return 'Uncategorised';
-            }
-          };
-          const categoryFnc = calculateCategory();
+          const categoryFnc = calculateCategory(item);
           const obj = {
             entityName: item['Entity Name'] || 'N/A',
             entityID: item['Entity ID'] || 'N/A',
