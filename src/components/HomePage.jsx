@@ -103,11 +103,22 @@ const HomePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // const calculateCategory = () => {
+    //   if (live <= 3 && live > 0) {
+    //     return 'Low SKUs';
+    //   } else if (live === 0) {
+    //     return 'Non-Live';
+    //   } else if (di === 1) {
+    //     return "Low DI's";
+    //   } else {
+    //     return 'Uncategorised';
+    //   }
+    // };
     const calculateCategory = () => {
-      if (live <= 3 && live > 0) {
-        return 'Low SKUs';
-      } else if (live === 0) {
+      if (live === 0) { 
         return 'Non-Live';
+      } else if (live <= 3) {
+        return 'Low SKUs';
       } else if (di === 1) {
         return "Low DI's";
       } else {
