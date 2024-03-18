@@ -250,23 +250,24 @@ const HomePage = () => {
       return;
     } else if (status) {
       setStatusError(false);
+      const obj = {
+        entityName,
+        entityID,
+        onboarding,
+        allocation,
+        publish,
+        fap,
+        live,
+        di,
+        status,
+        cataloguer,
+        category: category === 'Paid Seller' ? category : categoryFnc,
+      }
       const promise = databases.updateDocument(
         '65f058795179029c97a7', // Database ID
         '65f058bdc26797558fcf', // Collection ID
         sellerDataId,
-        {
-          entityName,
-          entityID,
-          onboarding,
-          allocation,
-          publish,
-          fap,
-          live,
-          di,
-          status,
-          cataloguer,
-          category: category === 'Paid Seller' ? category : categoryFnc,
-        }
+        obj
       );
       toast
         .promise(promise, {
@@ -297,9 +298,9 @@ const HomePage = () => {
           setOnboarding(data.onboarding || '');
           setAllocation(data.allocation || '');
           setPublish(data.publish || '');
-          setFap(data.fap || '');
-          setLive(data.live || '');
-          setDi(data.di || '');
+          setFap(data.fap || 0);
+          setLive(data.live || 0);
+          setDi(data.di || 0);
           setStatus(data.status);
           setCataloguer(data.cataloguer || 'Select Cataloguer');
           setCategory(data.category || 'Uncategorized');
