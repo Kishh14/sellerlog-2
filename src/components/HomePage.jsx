@@ -104,32 +104,32 @@ const HomePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const existingEntityID = sellerData.find(
+      (seller) => seller.entityID === entityID
+    );
+
     const calculateCategory = (live, di) => {
-      if (live === 0) {
+      if (Number(live) === 0) {
         return 'Non-Live';
       }
-      if (live > 0 && live <= 3) {
+      if (Number(live) > 0 && Number(live) <= 3) {
         return 'Low SKUs';
       }
-      if (di === 1) {
+      if (Number(di) === 1) {
         return "Low DI's";
       }
       return 'Uncategorised';
     };
 
-    const existingEntityID = sellerData.find(
-      (seller) => seller.entityID === entityID
-    );
-    
     const newSellerData = {
       entityName,
       entityID,
       onboarding,
       allocation,
       publish,
-      fap: fap || 0,
-      live: live || 0,
-      di: di || 0,
+      fap: Number(fap) || 0,
+      live: Number(live) || 0,
+      di: Number(di) || 0,
       status,
       cataloguer,
       category: calculateCategory(live, di),
@@ -160,6 +160,7 @@ const HomePage = () => {
             errorNotify();
           }
         );
+
     } else {
       const errorNotify = () =>
         toast.error(
@@ -231,14 +232,14 @@ const HomePage = () => {
   };
 
   const handleEdit = () => {
-    const calculateCategory = (live,di) => {
-      if (live === 0) {
+    const calculateCategory = (live, di) => {
+      if (Number(live) === 0) {
         return 'Non-Live';
       }
-      if (live > 0 && live <= 3) {
+      if (Number(live) > 0 && Number(live) <= 3) {
         return 'Low SKUs';
       }
-      if (di === 1) {
+      if (Number(di) === 1) {
         return "Low DI's";
       }
       return 'Uncategorised';
@@ -255,9 +256,9 @@ const HomePage = () => {
         onboarding,
         allocation,
         publish,
-        fap,
-        live,
-        di,
+        fap: Number(fap) || 0,
+        live: Number(live) || 0,
+        di: Number(di) || 0,
         status,
         cataloguer,
         category: category === 'Paid Seller' ? category : calculateCategory(live, di),
@@ -391,6 +392,7 @@ const HomePage = () => {
     setComments('');
     setStatus('');
     setCataloguer('');
+    setCategory('');
     setMultipleDeleteSellerDataId([]);
     setUploadedFile(null);
     setFileForUpdatingData(null);
@@ -445,21 +447,20 @@ const HomePage = () => {
         const parsedData = XLSX.utils.sheet_to_json(sheet);
         const arr = [];
 
-        const calculateCategory = (item) => {
-          if (item.live === 0) {
-            return 'Non-Live';
-          }
-          if (item.live > 0 && item.live <= 3) {
-            return 'Low SKUs';
-          }
-          if (item.di === 1) {
-            return "Low DI's";
-          }
-          return 'Uncategorised';
-        };
-
         parsedData.map((item) => {
-          const categoryFnc = calculateCategory(item);
+          const calculateCategory = (live, di) => {
+            if (Number(live) === 0) {
+              return 'Non-Live';
+            }
+            if (Number(live) > 0 && Number(live) <= 3) {
+              return 'Low SKUs';
+            }
+            if (Number(di) === 1) {
+              return "Low DI's";
+            }
+            return 'Uncategorised';
+          };
+
           const obj = {
             entityName: item['Entity Name'] || 'N/A',
             entityID: item['Entity ID'] || 'N/A',
@@ -467,11 +468,11 @@ const HomePage = () => {
             onboarding: ExcelDateToJSDate(item.Onboarding) || 'N/A',
             allocation: ExcelDateToJSDate(item.Allocation) || 'N/A',
             publish: ExcelDateToJSDate(item.Publish) || 'N/A',
-            fap: item.FAP || 0,
-            live: item.Live || 0,
-            di: item.DI || 0,
+            fap: Number(item.FAP) || 0,
+            live: Number(item.Live) || 0,
+            di: Number(item.DI) || 0,
             status: item.Status || '',
-            category: categoryFnc,
+            category: calculateCategory(item.Live, item.DI),
             comments: [],
           };
           arr.push(obj);
@@ -514,7 +515,6 @@ const HomePage = () => {
                   .then(
                     function (response) {
                       getData();
-                      console.log(response)
                     },
                     function (error) {
                       console.log('Error adding data: ')
@@ -557,42 +557,43 @@ const HomePage = () => {
         let hasUnmatchedEntity = false;
         let hasUpdated = false;
 
+        const calculateCategory = (live, di) => {
+          if (Number(live) === 0) {
+            return 'Non-Live';
+          }
+          if (Number(live) > 0 && Number(live) <= 3) {
+            return 'Low SKUs';
+          }
+          if (Number(di) === 1) {
+            return "Low DI's";
+          }
+          return 'Uncategorised';
+        };
+
         parsedData.map((parsedSeller) => {
           sellerData.filter(async (seller) => {
             try {
               if (
                 String(seller.entityID) === String(parsedSeller['Entity ID'])
               ) {
-                const calculateCategory = () => {
-                  if (parsedSeller.live === 0) {
-                    return 'Non-Live';
-                  }
-                  if (parsedSeller.live > 0 && parsedSeller.live <= 3) {
-                    return 'Low SKUs';
-                  }
-                  if (parsedSeller.di === 1) {
-                    return "Low DI's";
-                  }
-                  return 'Uncategorised';
-                };
-                const categoryFnc = calculateCategory();
+                const obj = {
+                  fap: Number(parsedSeller.FAP) || 0,
+                  live: Number(parsedSeller.Live) || 0,
+                  di: Number(parsedSeller.DI) || 0,
+                  onboarding: parsedSeller.Onboarding || seller.onboarding || '',
+                  allocation: parsedSeller.Allocation || seller.allocation || '',
+                  publish: parsedSeller.Publish || seller.publish || '',
+                  category:
+                    seller.category === 'Paid Seller'
+                      ? seller.category
+                      : calculateCategory(parsedSeller.Live, parsedSeller.DI),
+                }
 
                 const promise = databases.updateDocument(
                   '65f058795179029c97a7', // Database ID
                   '65f058bdc26797558fcf', // Collection ID
                   seller.$id,
-                  {
-                    fap: parsedSeller.FAP || seller.fap || 0,
-                    live: parsedSeller.Live || seller.live || 0,
-                    di: parsedSeller.DI || seller.di || 0,
-                    onboarding: parsedSeller.Onboarding || seller.onboarding || '',
-                    allocation: parsedSeller.Allocation || seller.allocation || '',
-                    publish: parsedSeller.Publish || seller.publish || '',
-                    category:
-                      seller.category === 'Paid Seller'
-                        ? seller.category
-                        : categoryFnc,
-                  }
+                  obj
                 );
                 if (!hasUpdated) {
                   hasUpdated = true;
