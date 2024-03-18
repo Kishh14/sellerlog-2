@@ -104,7 +104,7 @@ const HomePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const calculateCategory = () => {
+    const calculateCategory = (live, di) => {
       if (live === 0) {
         return 'Non-Live';
       }
@@ -116,11 +116,11 @@ const HomePage = () => {
       }
       return 'Uncategorised';
     };
-    
-    const categoryFnc = calculateCategory();
+
     const existingEntityID = sellerData.find(
       (seller) => seller.entityID === entityID
     );
+    
     const newSellerData = {
       entityName,
       entityID,
@@ -132,7 +132,7 @@ const HomePage = () => {
       di: di || 0,
       status,
       cataloguer,
-      category: categoryFnc,
+      category: calculateCategory(live, di),
     };
 
     if (!existingEntityID) {
@@ -231,7 +231,7 @@ const HomePage = () => {
   };
 
   const handleEdit = () => {
-    const calculateCategory = () => {
+    const calculateCategory = (live,di) => {
       if (live === 0) {
         return 'Non-Live';
       }
@@ -243,7 +243,6 @@ const HomePage = () => {
       }
       return 'Uncategorised';
     };
-    const categoryFnc = calculateCategory();
 
     if (!status) {
       setStatusError(true);
@@ -261,7 +260,7 @@ const HomePage = () => {
         di,
         status,
         cataloguer,
-        category: category === 'Paid Seller' ? category : categoryFnc,
+        category: category === 'Paid Seller' ? category : calculateCategory(live, di),
       }
       const promise = databases.updateDocument(
         '65f058795179029c97a7', // Database ID
