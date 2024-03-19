@@ -486,7 +486,7 @@ const HomePage = () => {
           try {
             if (existingEntityID) {
               handleFormModalClose();
-              console.log(
+              alert(
                 'Seller With Same Entity ID Already Exists! ' +
                       existingEntityID.entityName +
                       ' - ' +
