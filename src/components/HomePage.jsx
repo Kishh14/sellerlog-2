@@ -486,12 +486,21 @@ const HomePage = () => {
           try {
             if (existingEntityID) {
               handleFormModalClose();
-              alert(
+              console.log(
                 'Seller With Same Entity ID Already Exists! ' +
                       existingEntityID.entityName +
                       ' - ' +
                       existingEntityID.entityID
               )
+              const errorNotify = () =>
+                  toast.error(
+                    'Seller With Same Entity ID Already Exists! ' +
+                      existingEntityID.entityName +
+                      ' - ' +
+                      existingEntityID.entityID
+                  );
+                errorNotify();
+
               // if (!hasEntityError) {
               //   hasEntityError = true;
               //   const errorNotify = () =>
@@ -511,17 +520,23 @@ const HomePage = () => {
                 newSellerObj
               );
 
-              promise.then(
-                function (response) {
-                  getData();
-                },
-                function (error) {
-                  console.log('Error adding data: ')
-                  console.log(error);
-                  // const errorNotify = () => toast.error(`${error}`);
-                  // errorNotify();
-                }
-              );
+              toast
+                  .promise(promise, {
+                    pending: 'Adding Data...',
+                    success: 'New Seller Added! 👌',
+                    error: 'Error Occured While Adding New Seller 🤯',
+                  })
+                  .then(
+                    function (response) {
+                      getData();
+                    },
+                    function (error) {
+                      console.log('Error adding data: ')
+                      console.log(error);
+                      const errorNotify = () => toast.error(`${error}`);
+                      errorNotify();
+                    }
+                  );
 
               // if (!hasAdded) {
               //   hasAdded = true;
