@@ -434,8 +434,8 @@ const HomePage = () => {
   }
   const handleImportData = (e) => {
     e.preventDefault();
-    let hasAdded = false;
-    let hasEntityError = false;
+    // let hasAdded = false;
+    // let hasEntityError = false;
 
     if (uploadedFile) {
       const reader = new FileReader();
@@ -486,17 +486,23 @@ const HomePage = () => {
           try {
             if (existingEntityID) {
               handleFormModalClose();
-              if (!hasEntityError) {
-                hasEntityError = true;
-                const errorNotify = () =>
-                  toast.error(
-                    'Seller With Same Entity ID Already Exists! ' +
+              console.log(
+                'Seller With Same Entity ID Already Exists! ' +
                       existingEntityID.entityName +
                       ' - ' +
                       existingEntityID.entityID
-                  );
-                errorNotify();
-              }
+              )
+              // if (!hasEntityError) {
+              //   hasEntityError = true;
+              //   const errorNotify = () =>
+              //     toast.error(
+              //       'Seller With Same Entity ID Already Exists! ' +
+              //         existingEntityID.entityName +
+              //         ' - ' +
+              //         existingEntityID.entityID
+              //     );
+              //   errorNotify();
+              // }
             } else {
               const promise = databases.createDocument(
                 '65f058795179029c97a7',
@@ -504,26 +510,39 @@ const HomePage = () => {
                 uuidv4(),
                 newSellerObj
               );
-              if (!hasAdded) {
-                hasAdded = true;
-                toast
-                  .promise(promise, {
-                    pending: 'Adding Data...',
-                    success: 'New Seller Added! 👌',
-                    error: 'Error Occured While Adding New Seller 🤯',
-                  })
-                  .then(
-                    function (response) {
-                      getData();
-                    },
-                    function (error) {
-                      console.log('Error adding data: ')
-                      console.log(error);
-                      const errorNotify = () => toast.error(`${error}`);
-                      errorNotify();
-                    }
-                  );
-              }
+
+              promise.then(
+                function (response) {
+                  getData();
+                },
+                function (error) {
+                  console.log('Error adding data: ')
+                  console.log(error);
+                  // const errorNotify = () => toast.error(`${error}`);
+                  // errorNotify();
+                }
+              );
+
+              // if (!hasAdded) {
+              //   hasAdded = true;
+              //   toast
+              //     .promise(promise, {
+              //       pending: 'Adding Data...',
+              //       success: 'New Seller Added! 👌',
+              //       error: 'Error Occured While Adding New Seller 🤯',
+              //     })
+              //     .then(
+              //       function (response) {
+              //         getData();
+              //       },
+              //       function (error) {
+              //         console.log('Error adding data: ')
+              //         console.log(error);
+              //         const errorNotify = () => toast.error(`${error}`);
+              //         errorNotify();
+              //       }
+              //     );
+              // }
             }
           } catch (err) {
             const errorNotify = () => toast.error('Error Adding New Sellers ' + `${err}`);
