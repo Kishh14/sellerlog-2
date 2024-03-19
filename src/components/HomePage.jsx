@@ -87,9 +87,9 @@ const HomePage = () => {
     const getData = account.get();
     getData.then(
       function (response) {
-        // setAdminEmail(response.email);
+        setAdminEmail(response.email);
         console.log(response.email)
-        console.log(adminEmail)
+        console.log('adminEmail: ' + adminEmail)
       },
       function (error) {
         console.error(error);
@@ -1468,7 +1468,7 @@ const HomePage = () => {
                                       ></lord-icon>
                                     </button>
                                   </Dropdown.Item>
-                                  {adminEmail === 'lokesh5551@gmail.com' || 'salvikishan833@gmail.com' ? (
+                                  {adminEmail === 'lokesh5551@gmail.com' ? (
                                     <Dropdown.Item>
                                       <button
                                         className="border-0 bg-transparent"
