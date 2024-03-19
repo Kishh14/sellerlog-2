@@ -88,8 +88,6 @@ const HomePage = () => {
     getData.then(
       function (response) {
         setAdminEmail(response.email);
-        console.log(response.email)
-        console.log('adminEmail: ' + adminEmail)
       },
       function (error) {
         console.error(error);
